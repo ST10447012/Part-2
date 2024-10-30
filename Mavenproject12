@@ -1,0 +1,43 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class LoginTest {
+    private Login loginSystem;
+
+    @BeforeEach
+    public void setUp() {
+        loginSystem = new Login();
+    }
+
+    @Test
+    public void testCheckTaskDescription() {
+        Task task = new Task("Login Feature", 0, "Create Login to authenticate users", "Robyn", "Harrison", 8, "To Do");
+        assertTrue(task.checkTaskDescription());
+        
+        task = new Task("Add Task Feature", 1, "This description is way too long and should trigger an error", "Mike", "Smith", 10, "Doing");
+        assertFalse(task.checkTaskDescription());
+    }
+    
+    @Test
+    public void testCreateTaskID() {
+        Task task1 = new Task("Login Feature", 1, "Create Login to authenticate users", "Robyn", "Harrison", 8, "To Do");
+        assertEquals("LO:1:BYN", task1.createTaskID());
+        
+        Task task2 = new Task("Create Report", 0, "Generate quarterly report", "Mike", "Smith", 12, "Doing");
+        assertEquals("CR:0:ITH", task2.createTaskID());
+    }
+    
+    @Test
+    public void testTotalHoursAccumulation() {
+        loginSystem.addTask("Login Feature", "Create Login to authenticate users", "Robyn", "Harrison", 8, "To Do");
+        loginSystem.addTask("Add Task Feature", "Create Add Task feature to add task users", "Mike", "Smith", 10, "Doing");
+        assertEquals(18, loginSystem.getTotalHours());
+        
+        // Additional data to check accumulation
+        loginSystem.addTask("Another Task", "Extra feature", "John", "Doe", 55, "Done");
+        loginSystem.addTask("Refactor Code", "Improve codebase", "Alice", "Brown", 11, "Doing");
+        loginSystem.addTask("Final Task", "Last feature", "Jane", "Thomson", 1, "To Do");
+        assertEquals(89, loginSystem.getTotalHours());
+    }
+}
